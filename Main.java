@@ -13,16 +13,45 @@ public class Main {
 	public static void main(String[] args) {
 
 		int arr1[] = { 1, 2, 4 };
-		int arr2[] = { 1, 3, 4 };
+		int arr2[] = { 2, 3, 5 };
 		ListNode l1 = getLL(arr1);
 		ListNode l2 = getLL(arr2);
-		ListNode resNode = merge(l1, l2);
-		printLL(resNode);
+		ListNode resNode = mergeTwoLists1(l1, l2);
+		printLLS(resNode);
 	}
 
-	public static ListNode merge(ListNode l1, ListNode l2) {
-		
-		return l2;
+	public static ListNode mergeTwoLists2(ListNode l1, ListNode l2) {
+		if (l1 == null)
+			return l2;
+		if (l2 == null)
+			return l1;
+		if (l1.val < l2.val) {
+			l1.next = mergeTwoLists2(l1.next, l2);
+			return l1;
+		} else {
+			l2.next = mergeTwoLists2(l1, l2.next);
+			return l2;
+		}
+	}
+	
+	public static ListNode mergeTwoLists1(ListNode l1, ListNode l2) {
+		ListNode ln = new ListNode(0);
+
+		ListNode curr1 = l1;
+		ListNode curr2 = l2;
+		ListNode currMerge = ln;
+		while (curr1 != null || curr2 != null) {
+			if (curr1 != null && (curr2 == null || curr2.val > curr1.val)) {
+				currMerge.next = new ListNode(curr1.val);
+				curr1 = curr1.next;
+			} else if (curr2 != null && (curr1 == null || curr1.val >= curr2.val)) {
+				currMerge.next = new ListNode(curr2.val);
+				curr2 = curr2.next;
+			}
+			currMerge = currMerge.next;
+		}
+
+		return ln.next;
 	}
 
 	public static ListNode getLL(int arr1[]) {
@@ -34,16 +63,33 @@ public class Main {
 		}
 		return l1.next;
 	}
-
-	public static void printLL(ListNode resNode) {
+	public static void printLLS(ListNode resNode) {
+		
 		while (resNode.next != null) {
-			System.out.print("[{ " + resNode.val + " }{" + resNode + "} ] --> ");
+			System.out.print("[" + resNode.val + "]-->");
 			resNode = resNode.next;
 		}
-		System.out.print("[{ " + resNode.val + " } {" + resNode + "} ]");
+		System.out.print("[" + resNode.val +"]");
 	}
 
+	public static void printLL(ListNode resNode) {
+		System.out.print("[{head: " + resNode + "} ] -->");
+		while (resNode.next != null) {
+			System.out.print("[{ " + resNode.val + " }{" + resNode.next + "} ] --> ");
+			resNode = resNode.next;
+		}
+		System.out.print("[{ " + resNode.val + " } {" + resNode.next + "} ]");
+	}
+	public static void printLLP(ListNode resNode) {
+		System.out.print("[{head: " + resNode + "} ] -->");
+		while (resNode.next != null) {
+			System.out.print("[{"+resNode.prev+"}<--{ " + resNode.val + " }{" + resNode.next +"} ] --> ");
+			resNode = resNode.next;
+		}
+		System.out.print("[{ " + resNode.val + " } {" + resNode.next + "} ]");
+	}
 	public static class ListNode {
+		ListNode prev;
 		int val;
 		ListNode next;
 
